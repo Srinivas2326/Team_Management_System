@@ -1,4 +1,5 @@
 const Membership = require("../models/Membership");
+const Role = require("../models/Role");
 
 exports.getPermissions = async (req, res) => {
   try {
@@ -7,14 +8,25 @@ exports.getPermissions = async (req, res) => {
     const membership = await Membership.findOne({
       user: userId,
       team: teamId
-    }).populate("role");
+    });
 
     if (!membership) {
       return res.json([]);
     }
 
-    res.json(membership.role.permissions);
+    const role = await Role.findOne({
+      name: membership.role
+    });
+
+    if (!role) {
+      return res.json([]);
+    }
+
+    res.json(role.permissions);
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };

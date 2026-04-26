@@ -4,19 +4,15 @@ exports.createMembership = async (req, res) => {
   try {
     const { user, team, role } = req.body;
 
-    const existing = await Membership.findOne({ user, team });
+    let data = await Membership.findOne({ user, team });
 
-    if (existing) {
-      existing.role = role;
-      await existing.save();
-
-      return res.json({
-        message: "Updated",
-        data: existing
-      });
+    if (data) {
+      data.role = role;
+      await data.save();
+      return res.json(data);
     }
 
-    const data = await Membership.create({
+    data = await Membership.create({
       user,
       team,
       role
@@ -25,8 +21,6 @@ exports.createMembership = async (req, res) => {
     res.status(201).json(data);
 
   } catch (error) {
-    console.log(error);
-
     res.status(500).json({
       message: error.message
     });
@@ -40,6 +34,38 @@ exports.getMemberships = async (req, res) => {
       .populate("team");
 
     res.json(data);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+exports.updateMembership = async (req, res) => {
+  try {
+    const data = await Membership.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(data);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+exports.deleteMembership = async (req, res) => {
+  try {
+    await Membership.findByIdAndDelete(req.params.id);
+
+    res.json({
+      message: "Removed Successfully"
+    });
 
   } catch (error) {
     res.status(500).json({

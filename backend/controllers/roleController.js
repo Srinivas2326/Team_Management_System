@@ -10,6 +10,24 @@ exports.createRole = async (req, res) => {
 };
 
 exports.getRoles = async (req, res) => {
-  const roles = await Role.find();
-  res.json(roles);
+  try {
+    const roles = await Role.find();
+    res.json(roles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateRolePermissions = async (req, res) => {
+  try {
+    const role = await Role.findByIdAndUpdate(
+      req.params.id,
+      { permissions: req.body.permissions },
+      { new: true }
+    );
+
+    res.json(role);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

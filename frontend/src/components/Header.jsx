@@ -2,7 +2,6 @@ function Header({ tab, setTab }) {
   return (
     <div className="header">
       <div>
-        <span className="badge">v2.0 Stable</span>
         <h1>Team Access Control</h1>
         <p>Manage users, teams, and permission resolution.</p>
       </div>

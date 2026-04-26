@@ -10,6 +10,10 @@ exports.createTeam = async (req, res) => {
 };
 
 exports.getTeams = async (req, res) => {
-  const teams = await Team.find();
-  res.json(teams);
+  try {
+    const teams = await Team.find();
+    res.json(teams);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

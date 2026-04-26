@@ -1,3 +1,6 @@
+/* =========================
+   GLOBAL RESET
+========================= */
 * {
   margin: 0;
   padding: 0;
@@ -5,309 +8,376 @@
 }
 
 body {
-  background: #f5f7fb;
+  background: #f4f7fb;
   font-family: Inter, Arial, sans-serif;
   color: #111827;
-  line-height: 1.5;
 }
 
-/* ---------------- HEADER ---------------- */
+.app {
+  width: 100%;
+  min-height: 100vh;
+}
 
-.header {
-  background: white;
-  padding: 28px 48px;
-  border-bottom: 1px solid #e5e7eb;
+/* =========================
+   HEADER
+========================= */
+.topHeader {
+  padding: 34px 46px 20px;
 }
 
 .badgeRow {
   display: flex;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 10px;
   flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
 .badge {
-  display: inline-block;
-  background: #e9efff;
-  color: #2563eb;
+  background: #2563eb;
+  color: white;
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 13px;
-  font-weight: 600;
-}
-
-.header h1 {
-  font-size: 42px;
   font-weight: 700;
-  margin-bottom: 10px;
 }
 
-.header p {
-  font-size: 18px;
+.badge.light {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.topHeader h1 {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.topHeader p {
+  font-size: 20px;
   color: #6b7280;
-  margin-bottom: 28px;
+  line-height: 1.5;
+  max-width: 760px;
 }
 
-/* ---------------- NAV ---------------- */
+/* QUICK BUTTON */
+.quickBtn {
+  margin-top: 28px;
+  padding: 14px 24px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
 
-.navButtons {
+.quickBtn:hover {
+  background: #1d4ed8;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+.tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 22px;   /* more gap between Permission / Team / Management */
+  gap: 14px;
+  padding: 0 46px 30px;
 }
 
-.navButtons button {
+.tabs button {
+  min-width: 155px;
+  padding: 14px 24px;
   border: none;
-  background: transparent;
-  font-size: 16px;
-  padding: 10px 0;
+  border-radius: 14px;
+  background: #2563eb;
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
   cursor: pointer;
-  color: #6b7280;
-  border-bottom: 3px solid transparent;
-  font-weight: 600;
 }
 
-.navButtons button.active {
-  color: #111827;
-  border-color: #2563eb;
+.tabs button:hover {
+  background: #1d4ed8;
 }
 
-/* ---------------- COMMON PAGE ---------------- */
-
-.dashboardPage,
-.grid {
-  padding: 32px 48px;
-  display: grid;
-  gap: 24px;
+.tabs .activeTab {
+  background: #1e40af;
 }
 
+/* =========================
+   MAIN
+========================= */
+.mainContent {
+  padding: 0 46px 40px;
+}
+
+/* =========================
+   GRID LAYOUT
+========================= */
+.grid,
 .dashboardPage {
-  grid-template-columns: 360px 1fr;
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  gap: 28px;
+  align-items: start;
 }
 
-/* ---------------- CARD ---------------- */
-
+/* =========================
+   CARDS
+========================= */
+.card,
 .contextCard,
-.permissionCard,
-.card {
+.permissionCard {
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 26px;
+  border-radius: 22px;
+  padding: 32px;
 }
 
+.card h2,
 .contextCard h2,
-.permissionCard h2,
-.card h2 {
-  font-size: 24px;
-  margin-bottom: 8px;
+.permissionCard h2 {
+  font-size: 30px;
+  margin-bottom: 14px;
 }
 
+.card p,
 .contextCard p,
-.permissionCard p,
-.card p {
+.permissionCard p {
+  font-size: 18px;
   color: #6b7280;
-  font-size: 15px;
-  margin-bottom: 22px;
+  line-height: 1.5;
 }
 
-/* ---------------- FORM ---------------- */
-
-.contextCard label,
-.card label {
+/* =========================
+   FORM FIELDS
+========================= */
+label {
   display: block;
-  margin-bottom: 8px;
-  margin-top: 18px;
-  font-size: 15px;
-  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 700;
 }
 
+input,
 select,
-input {
+textarea {
   width: 100%;
-  padding: 14px 16px;
+  padding: 15px 16px;
+  border-radius: 14px;
   border: 1px solid #d1d5db;
-  border-radius: 12px;
-  font-size: 15px;
+  font-size: 16px;
   outline: none;
   background: white;
 }
 
+input:focus,
 select:focus,
-input:focus {
+textarea:focus {
   border-color: #2563eb;
 }
 
-/* ---------------- ROLE BUTTONS ---------------- */
-
-.roleButtons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;      /* added good spacing */
-  margin-top: 16px;
-  margin-bottom: 10px;
+/* inputs spacing */
+.card input + input,
+.card select + select,
+.card input + button,
+.card select + button {
+  margin-top: 14px;
 }
 
-.roleButtons button {
-  margin: 0;
-  min-width: 92px;
-  padding: 11px 18px;
-}
-
-/* ---------------- BUTTON ---------------- */
-
+/* =========================
+   BUTTONS
+========================= */
 button {
-  margin-top: 18px;
+  border: none;
   background: #2563eb;
   color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 12px;
-  font-size: 14px;
-  cursor: pointer;
+  padding: 13px 22px;
+  border-radius: 14px;
+  font-size: 16px;
   font-weight: 700;
+  cursor: pointer;
 }
 
 button:hover {
   background: #1d4ed8;
 }
 
-/* ---------------- RIGHT SIDE ---------------- */
-
-.permissionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.liveBadge {
-  background: #f0fdf4;
-  color: #16a34a;
-  padding: 8px 14px;
-  border-radius: 24px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.permissionBody {
-  margin-top: 18px;
-}
-
-.emptyBox {
-  border: 2px dashed #d1d5db;
-  border-radius: 16px;
-  min-height: 220px;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.emptyBox h3 {
-  font-size: 26px;
-  margin-bottom: 10px;
-}
-
-.emptyBox p {
-  font-size: 15px;
-  color: #6b7280;
-  text-align: center;
-}
-
+/* =========================
+   ROLE BUTTON GROUPS
+========================= */
+.roleButtons,
+.actionButtons,
 .permissionList {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  margin-top: 16px;
 }
 
-.permissionPill {
+.roleButtons button {
+  min-width: 90px;
+}
+
+/* Assign button below roles */
+.roleButtons + button,
+.actionButtons + button {
+  margin-top: 18px;
+}
+
+/* =========================
+   MANAGEMENT PAGE FIX
+========================= */
+.card button {
+  margin-top: 18px;
+}
+
+/* =========================
+   TASK PAGE FIX
+========================= */
+.taskItem {
+  padding: 14px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.taskItem:last-child {
+  border-bottom: none;
+}
+
+.taskItem button {
+  margin-top: 12px;
+}
+
+/* =========================
+   PERMISSION PAGE
+========================= */
+.permissionHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.liveBadge {
+  background: #ecfdf3;
+  color: #16a34a;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.permissionBody {
+  margin-top: 26px;
+}
+
+.emptyBox {
+  min-height: 250px;
+  border: 2px dashed #d1d5db;
+  border-radius: 18px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.emptyBox h3 {
+  font-size: 44px;
+}
+
+.emptyBox p {
+  font-size: 18px;
+  max-width: 620px;
+}
+
+/* =========================
+   PERMISSION PILLS
+========================= */
+.permissionPill,
+.pill {
   background: #dbeafe;
   color: #1d4ed8;
-  padding: 10px 14px;
+  padding: 12px 18px;
   border-radius: 30px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
 }
 
-/* ---------------- TABLE ---------------- */
+/* =========================
+   MINI PROFILE
+========================= */
+.miniProfile {
+  margin-top: 24px;
+  background: #eff6ff;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
 
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* =========================
+   TABLE
+========================= */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 18px;
 }
 
 th,
 td {
-  text-align: left;
   padding: 14px;
+  text-align: left;
   border-bottom: 1px solid #e5e7eb;
-  font-size: 14px;
 }
 
 th {
   background: #f9fafb;
-  font-weight: 700;
 }
 
-/* ---------------- MANAGEMENT PAGE ---------------- */
-
-.grid {
-  grid-template-columns: 1fr 1fr;
-}
-
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 10px;
-}
-
-.formGroup {
-  margin-bottom: 18px;
-}
-
-/* ---------------- RESPONSIVE ---------------- */
-
+/* =========================
+   RESPONSIVE
+========================= */
 @media (max-width: 1100px) {
-  .dashboardPage,
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .header,
-  .dashboardPage,
-  .grid {
-    padding: 24px;
-  }
-
-  .header h1 {
-    font-size: 34px;
-  }
-
-  .header p {
-    font-size: 16px;
-  }
-
-  .navButtons {
-    gap: 14px;
-  }
-
-  .formRow {
+  .grid,
+  .dashboardPage {
     grid-template-columns: 1fr;
   }
 
-  .permissionHeader {
-    flex-direction: column;
-    align-items: flex-start;
+  .topHeader,
+  .tabs,
+  .mainContent {
+    padding-left: 22px;
+    padding-right: 22px;
   }
 
-  .roleButtons {
-    gap: 10px;
+  .topHeader h1 {
+    font-size: 40px;
+  }
+
+  .tabs button {
+    min-width: auto;
+    flex: 1;
   }
 }

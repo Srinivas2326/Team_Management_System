@@ -1,7 +1,8 @@
 import { useState } from "react";
-import PermissionResolver from "./components/PermissionResolver";
+import Resolver from "./components/Resolver";
 import Members from "./components/Members";
 import Management from "./components/Management";
+import Tasks from "./components/Tasks";
 import "./index.css";
 
 function App() {
@@ -13,59 +14,87 @@ function App() {
 
   return (
     <div className="app">
-
       {/* HEADER */}
       <header className="topHeader">
         <div>
           <div className="badgeRow">
-            <span className="badge">v2.4.0 Stable</span>
-            <span className="badge light">Enterprise Edition</span>
           </div>
 
           <h1>Team Access Control</h1>
+
           <p>
-            Manage cross-team roles and granular permission resolution.
+            Manage cross-team roles and granular
+            permission resolution.
           </p>
         </div>
 
-        <button className="quickBtn" onClick={goManagement}>
+        <button
+          className="quickBtn"
+          onClick={goManagement}
+        >
           Quick Create
         </button>
       </header>
 
-      {/* NAV */}
+      {/* NAVIGATION */}
       <nav className="tabs">
-
         <button
-          className={tab === "resolver" ? "activeTab" : ""}
+          className={
+            tab === "resolver"
+              ? "activeTab"
+              : ""
+          }
           onClick={() => setTab("resolver")}
         >
           Permission Resolver
         </button>
 
         <button
-          className={tab === "members" ? "activeTab" : ""}
+          className={
+            tab === "members"
+              ? "activeTab"
+              : ""
+          }
           onClick={() => setTab("members")}
         >
           Team Members
         </button>
 
         <button
-          className={tab === "management" ? "activeTab" : ""}
+          className={
+            tab === "management"
+              ? "activeTab"
+              : ""
+          }
           onClick={() => setTab("management")}
         >
           Management
         </button>
 
+        <button
+          className={
+            tab === "tasks"
+              ? "activeTab"
+              : ""
+          }
+          onClick={() => setTab("tasks")}
+        >
+          Tasks
+        </button>
       </nav>
 
-      {/* CONTENT */}
+      {/* MAIN CONTENT */}
       <main className="mainContent">
-        {tab === "resolver" && <PermissionResolver />}
-        {tab === "members" && <Members />}
-        {tab === "management" && <Management />}
-      </main>
+        {tab === "resolver" && <Resolver />}
 
+        {tab === "members" && <Members />}
+
+        {tab === "management" && (
+          <Management />
+        )}
+
+        {tab === "tasks" && <Tasks />}
+      </main>
     </div>
   );
 }

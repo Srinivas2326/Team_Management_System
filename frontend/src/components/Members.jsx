@@ -12,6 +12,9 @@ function Members() {
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState("");
+
   useEffect(() => {
     fetchInitialData();
   }, []);
@@ -60,18 +63,28 @@ function Members() {
     }
 
     try {
-      await API.post("/membership", {
-        team: selectedTeam,
-        user: selectedUser,
-        role: selectedRole
-      });
+      if (editMode) {
+        await API.put(`/membership/${editId}`, {
+          team: selectedTeam,
+          user: selectedUser,
+          role: selectedRole
+        });
 
-      alert("Updated Successfully");
+        alert("Updated Successfully");
+      } else {
+        await API.post("/membership", {
+          team: selectedTeam,
+          user: selectedUser,
+          role: selectedRole
+        });
+
+        alert("Assigned Successfully");
+      }
 
       fetchMembers(selectedTeam);
 
-      setSelectedUser("");
-      setSelectedRole("");
+      resetForm();
+
     } catch (error) {
       console.log(error);
       alert("Failed");
@@ -81,6 +94,33 @@ function Members() {
   const editMember = (member) => {
     setSelectedUser(member.user._id);
     setSelectedRole(member.role);
+    setEditId(member._id);
+    setEditMode(true);
+  };
+
+  const removeMember = async (id) => {
+    try {
+      await API.delete(`/membership/${id}`);
+
+      fetchMembers(selectedTeam);
+
+      if (editId === id) {
+        resetForm();
+      }
+
+      alert("Removed Successfully");
+
+    } catch (error) {
+      console.log(error);
+      alert("Failed");
+    }
+  };
+
+  const resetForm = () => {
+    setSelectedUser("");
+    setSelectedRole("");
+    setEditMode(false);
+    setEditId("");
   };
 
   const teamName =
@@ -88,13 +128,18 @@ function Members() {
 
   return (
     <div className="dashboardPage">
-
       {/* LEFT PANEL */}
       <div className="contextCard">
-        <h2>Add to Team</h2>
-        <p>Assign users to teams with specific roles.</p>
+        <h2>
+          {editMode ? "Edit Member Role" : "Add to Team"}
+        </h2>
+
+        <p>
+          Assign users to teams with specific roles.
+        </p>
 
         <label>Select Team</label>
+
         <select
           value={selectedTeam}
           onChange={(e) => setSelectedTeam(e.target.value)}
@@ -109,6 +154,7 @@ function Members() {
         </select>
 
         <label>Select User</label>
+
         <select
           value={selectedUser}
           onChange={(e) => setSelectedUser(e.target.value)}
@@ -122,7 +168,7 @@ function Members() {
           ))}
         </select>
 
-        <label>Assign Roles</label>
+        <label>Assign Role</label>
 
         <div className="roleGrid">
           {roles.map((role) => (
@@ -141,8 +187,19 @@ function Members() {
         </div>
 
         <button className="mainBtn" onClick={assignRole}>
-          Update Assignment
+          {editMode
+            ? "Update Assignment"
+            : "Assign User"}
         </button>
+
+        {editMode && (
+          <button
+            className="cancelBtn"
+            onClick={resetForm}
+          >
+            Cancel Edit
+          </button>
+        )}
       </div>
 
       {/* RIGHT PANEL */}
@@ -152,13 +209,13 @@ function Members() {
         {selectedTeam ? (
           <p>Current members of {teamName}</p>
         ) : (
-          <p>Select a team to view its members.</p>
+          <p>Select a team to view members.</p>
         )}
 
         {!selectedTeam ? (
           <div className="emptyBox">
-            <h3>Select a team</h3>
-            <p>Select a team to see who's inside.</p>
+            <h3>Select Team</h3>
+            <p>Select team to view roster.</p>
           </div>
         ) : members.length === 0 ? (
           <div className="emptyBox">
@@ -167,45 +224,58 @@ function Members() {
           </div>
         ) : (
           <div className="tableWrap">
-
             <div className="tableHead">
               <span>MEMBER</span>
-              <span>ROLES</span>
+              <span>ROLE</span>
               <span>ACTION</span>
             </div>
 
             {members.map((member) => (
-              <div className="tableRow" key={member._id}>
+              <div
+                className="tableRow"
+                key={member._id}
+              >
                 <div className="memberBox">
-
                   <div className="avatar">
-                    {member.user?.name?.charAt(0).toUpperCase()}
+                    {member.user?.name
+                      ?.charAt(0)
+                      .toUpperCase()}
                   </div>
 
                   <div>
                     <h4>{member.user?.name}</h4>
                     <p>{member.user?.email}</p>
                   </div>
-
                 </div>
 
                 <span className="roleTag">
                   {member.role}
                 </span>
 
-                <button
-                  className="editBtn"
-                  onClick={() => editMember(member)}
-                >
-                  Edit Roles
-                </button>
+                <div className="actionBtns">
+                  <button
+                    className="editBtn"
+                    onClick={() =>
+                      editMember(member)
+                    }
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="deleteBtn"
+                    onClick={() =>
+                      removeMember(member._id)
+                    }
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             ))}
-
           </div>
         )}
       </div>
-
     </div>
   );
 }
