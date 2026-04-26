@@ -1,6 +1,4 @@
-/* =========================
-   GLOBAL RESET
-========================= */
+
 * {
   margin: 0;
   padding: 0;
@@ -8,26 +6,24 @@
 }
 
 body {
-  background: #f4f7fb;
-  font-family: Inter, Arial, sans-serif;
-  color: #111827;
+  background: #f1f5f9;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #0f172a;
 }
+
 
 .app {
-  width: 100%;
-  min-height: 100vh;
+  padding: 34px 48px;
 }
 
-/* =========================
-   HEADER
-========================= */
+
 .topHeader {
-  padding: 34px 46px 20px;
+  margin-bottom: 28px;
 }
 
 .badgeRow {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 16px;
 }
@@ -35,7 +31,7 @@ body {
 .badge {
   background: #2563eb;
   color: white;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 30px;
   font-size: 13px;
   font-weight: 700;
@@ -47,52 +43,46 @@ body {
 }
 
 .topHeader h1 {
-  font-size: 56px;
+  font-size: 62px;
   font-weight: 800;
   margin-bottom: 12px;
 }
 
 .topHeader p {
-  font-size: 20px;
-  color: #6b7280;
+  font-size: 19px;
+  color: #64748b;
   line-height: 1.5;
   max-width: 760px;
 }
 
-/* QUICK BUTTON */
+
 .quickBtn {
-  margin-top: 28px;
-  padding: 14px 24px;
-  border: none;
+  margin-top: 26px;
   background: #2563eb;
   color: white;
-  border-radius: 14px;
-  font-size: 17px;
+  padding: 15px 28px;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
   font-weight: 700;
   cursor: pointer;
 }
 
-.quickBtn:hover {
-  background: #1d4ed8;
-}
 
-/* =========================
-   NAVIGATION
-========================= */
 .tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  padding: 0 46px 30px;
+  gap: 18px;
+  margin: 28px 0 34px;
 }
 
 .tabs button {
-  min-width: 155px;
-  padding: 14px 24px;
-  border: none;
-  border-radius: 14px;
   background: #2563eb;
   color: white;
+  border: none;
+  padding: 15px 28px;
+  min-width: 185px;
+  border-radius: 16px;
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
@@ -102,144 +92,131 @@ body {
   background: #1d4ed8;
 }
 
-.tabs .activeTab {
-  background: #1e40af;
+.activeTab {
+  background: #1e40af !important;
 }
 
-/* =========================
-   MAIN
-========================= */
-.mainContent {
-  padding: 0 46px 40px;
-}
 
-/* =========================
-   GRID LAYOUT
-========================= */
 .grid,
 .dashboardPage {
   display: grid;
-  grid-template-columns: 390px 1fr;
-  gap: 28px;
+  grid-template-columns: 420px 1fr;
+  gap: 30px;
   align-items: start;
 }
 
-/* =========================
-   CARDS
-========================= */
+
 .card,
 .contextCard,
 .permissionCard {
   background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 22px;
-  padding: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 34px;
 }
 
 .card h2,
 .contextCard h2,
 .permissionCard h2 {
-  font-size: 30px;
+  font-size: 34px;
   margin-bottom: 14px;
 }
 
 .card p,
 .contextCard p,
 .permissionCard p {
-  font-size: 18px;
-  color: #6b7280;
-  line-height: 1.5;
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1.6;
+  margin-bottom: 22px;
 }
 
-/* =========================
-   FORM FIELDS
-========================= */
+
 label {
   display: block;
-  margin-top: 24px;
+  margin-top: 18px;
   margin-bottom: 10px;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 input,
-select,
-textarea {
+select {
   width: 100%;
   padding: 15px 16px;
   border-radius: 14px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #cbd5e1;
   font-size: 16px;
   outline: none;
-  background: white;
 }
 
 input:focus,
-select:focus,
-textarea:focus {
+select:focus {
   border-color: #2563eb;
 }
 
-/* inputs spacing */
-.card input + input,
-.card select + select,
-.card input + button,
-.card select + button {
-  margin-top: 14px;
+
+button {
+  cursor: pointer;
 }
 
-/* =========================
-   BUTTONS
-========================= */
-button {
-  border: none;
+.card button,
+.contextCard button,
+.permissionCard button {
   background: #2563eb;
   color: white;
+  border: none;
   padding: 13px 22px;
   border-radius: 14px;
   font-size: 16px;
   font-weight: 700;
-  cursor: pointer;
 }
 
-button:hover {
+.card button:hover,
+.contextCard button:hover,
+.permissionCard button:hover {
   background: #1d4ed8;
 }
 
-/* =========================
-   ROLE BUTTON GROUPS
-========================= */
+
 .roleButtons,
-.actionButtons,
-.permissionList {
+.roleGroup,
+.roleRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 14px !important;        
+  margin-top: 18px;
+  margin-bottom: 22px;        
 }
 
-.roleButtons button {
-  min-width: 90px;
+.roleButtons button,
+.roleGroup button,
+.roleRow button {
+  min-width: 105px;
+  padding: 13px 18px;
 }
 
-/* Assign button below roles */
+.assignBtn,
+.assignUserBtn,
+.updateBtn,
 .roleButtons + button,
-.actionButtons + button {
-  margin-top: 18px;
+.roleGroup + button,
+.roleRow + button {
+  margin-top: 18px !important;
 }
 
-/* =========================
-   MANAGEMENT PAGE FIX
-========================= */
-.card button {
-  margin-top: 18px;
+
+.card input + input {
+  margin-top: 14px;
 }
 
-/* =========================
-   TASK PAGE FIX
-========================= */
+.card input + button {
+  margin-top: 22px;
+}
+
+
 .taskItem {
-  padding: 14px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -248,79 +225,78 @@ button:hover {
 }
 
 .taskItem button {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
-/* =========================
-   PERMISSION PAGE
-========================= */
+
 .permissionHeader {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
   align-items: flex-start;
+  gap: 18px;
 }
 
 .liveBadge {
-  background: #ecfdf3;
+  background: #ecfdf5;
   color: #16a34a;
-  padding: 10px 18px;
-  border-radius: 30px;
-  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
   font-weight: 700;
-  white-space: nowrap;
 }
 
 .permissionBody {
   margin-top: 26px;
 }
 
+
 .emptyBox {
-  min-height: 250px;
-  border: 2px dashed #d1d5db;
-  border-radius: 18px;
-  padding: 30px;
+  min-height: 260px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 14px;
+  flex-direction: column;
   text-align: center;
+  gap: 14px;
+  padding: 30px;
 }
 
 .emptyBox h3 {
-  font-size: 44px;
+  font-size: 52px;
 }
 
 .emptyBox p {
-  font-size: 18px;
   max-width: 620px;
 }
 
-/* =========================
-   PERMISSION PILLS
-========================= */
+
+.permissionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .permissionPill,
 .pill {
   background: #dbeafe;
   color: #1d4ed8;
   padding: 12px 18px;
-  border-radius: 30px;
+  border-radius: 999px;
   font-size: 15px;
   font-weight: 700;
 }
 
-/* =========================
-   MINI PROFILE
-========================= */
+
 .miniProfile {
   margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
   background: #eff6ff;
   border-radius: 18px;
   padding: 18px;
-  display: flex;
-  gap: 14px;
-  align-items: center;
 }
 
 .avatar {
@@ -329,55 +305,47 @@ button:hover {
   border-radius: 50%;
   background: #2563eb;
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* =========================
-   TABLE
-========================= */
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 18px;
 }
 
 th,
 td {
-  padding: 14px;
   text-align: left;
+  padding: 14px;
   border-bottom: 1px solid #e5e7eb;
 }
 
 th {
-  background: #f9fafb;
+  background: #f8fafc;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+
 @media (max-width: 1100px) {
   .grid,
   .dashboardPage {
     grid-template-columns: 1fr;
   }
 
-  .topHeader,
-  .tabs,
-  .mainContent {
-    padding-left: 22px;
-    padding-right: 22px;
-  }
-
-  .topHeader h1 {
-    font-size: 40px;
-  }
-
   .tabs button {
     min-width: auto;
     flex: 1;
+  }
+
+  .topHeader h1 {
+    font-size: 44px;
+  }
+
+  .app {
+    padding: 20px;
   }
 }
