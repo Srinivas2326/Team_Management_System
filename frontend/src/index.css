@@ -1,0 +1,313 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f7fb;
+  font-family: Inter, Arial, sans-serif;
+  color: #111827;
+  line-height: 1.5;
+}
+
+/* ---------------- HEADER ---------------- */
+
+.header {
+  background: white;
+  padding: 28px 48px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.badgeRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-block;
+  background: #e9efff;
+  color: #2563eb;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.header h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 18px;
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+/* ---------------- NAV ---------------- */
+
+.navButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;   /* more gap between Permission / Team / Management */
+}
+
+.navButtons button {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #6b7280;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+}
+
+.navButtons button.active {
+  color: #111827;
+  border-color: #2563eb;
+}
+
+/* ---------------- COMMON PAGE ---------------- */
+
+.dashboardPage,
+.grid {
+  padding: 32px 48px;
+  display: grid;
+  gap: 24px;
+}
+
+.dashboardPage {
+  grid-template-columns: 360px 1fr;
+}
+
+/* ---------------- CARD ---------------- */
+
+.contextCard,
+.permissionCard,
+.card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 26px;
+}
+
+.contextCard h2,
+.permissionCard h2,
+.card h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.contextCard p,
+.permissionCard p,
+.card p {
+  color: #6b7280;
+  font-size: 15px;
+  margin-bottom: 22px;
+}
+
+/* ---------------- FORM ---------------- */
+
+.contextCard label,
+.card label {
+  display: block;
+  margin-bottom: 8px;
+  margin-top: 18px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+select,
+input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  background: white;
+}
+
+select:focus,
+input:focus {
+  border-color: #2563eb;
+}
+
+/* ---------------- ROLE BUTTONS ---------------- */
+
+.roleButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;      /* added good spacing */
+  margin-top: 16px;
+  margin-bottom: 10px;
+}
+
+.roleButtons button {
+  margin: 0;
+  min-width: 92px;
+  padding: 11px 18px;
+}
+
+/* ---------------- BUTTON ---------------- */
+
+button {
+  margin-top: 18px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+/* ---------------- RIGHT SIDE ---------------- */
+
+.permissionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.liveBadge {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 8px 14px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.permissionBody {
+  margin-top: 18px;
+}
+
+.emptyBox {
+  border: 2px dashed #d1d5db;
+  border-radius: 16px;
+  min-height: 220px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyBox h3 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.emptyBox p {
+  font-size: 15px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.permissionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.permissionPill {
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 10px 14px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ---------------- TABLE ---------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+th {
+  background: #f9fafb;
+  font-weight: 700;
+}
+
+/* ---------------- MANAGEMENT PAGE ---------------- */
+
+.grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.formGroup {
+  margin-bottom: 18px;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 1100px) {
+  .dashboardPage,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header,
+  .dashboardPage,
+  .grid {
+    padding: 24px;
+  }
+
+  .header h1 {
+    font-size: 34px;
+  }
+
+  .header p {
+    font-size: 16px;
+  }
+
+  .navButtons {
+    gap: 14px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .permissionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .roleButtons {
+    gap: 10px;
+  }
+}
