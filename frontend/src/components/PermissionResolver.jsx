@@ -57,7 +57,6 @@ function Dashboard() {
   return (
     <div className="dashboardPage">
 
-      {/* LEFT SIDE */}
       <div className="contextCard">
         <h2>Context Selector</h2>
         <p>Choose a user and team to see active permissions.</p>
@@ -104,7 +103,6 @@ function Dashboard() {
         )}
       </div>
 
-      {/* RIGHT SIDE */}
       <div className="permissionCard">
         <div className="permissionHeader">
           <div>

@@ -128,7 +128,6 @@ function Members() {
 
   return (
     <div className="dashboardPage">
-      {/* LEFT PANEL */}
       <div className="contextCard">
         <h2>
           {editMode ? "Edit Member Role" : "Add to Team"}
@@ -202,7 +201,6 @@ function Members() {
         )}
       </div>
 
-      {/* RIGHT PANEL */}
       <div className="permissionCard">
         <h2>Team Roster</h2>
 

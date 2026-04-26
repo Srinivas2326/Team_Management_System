@@ -14,7 +14,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* HEADER */}
       <header className="topHeader">
         <div>
           <div className="badgeRow">
@@ -36,7 +35,6 @@ function App() {
         </button>
       </header>
 
-      {/* NAVIGATION */}
       <nav className="tabs">
         <button
           className={
@@ -83,7 +81,6 @@ function App() {
         </button>
       </nav>
 
-      {/* MAIN CONTENT */}
       <main className="mainContent">
         {tab === "resolver" && <Resolver />}
 
