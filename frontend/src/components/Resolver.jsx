@@ -9,28 +9,41 @@ function Resolver() {
   const [team, setTeam] = useState("");
 
   const [permissions, setPermissions] = useState([]);
+  const [selected, setSelected] = useState(false);
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
-    const u = await API.get("/users");
-    const t = await API.get("/teams");
+    try {
+      const u = await API.get("/users");
+      const t = await API.get("/teams");
 
-    setUsers(u.data);
-    setTeams(t.data);
+      setUsers(u.data);
+      setTeams(t.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     if (user && team) {
+      setSelected(true);
       getPermissions();
     }
   }, [user, team]);
 
   const getPermissions = async () => {
-    const res = await API.get(`/permissions/${user}/${team}`);
-    setPermissions(res.data);
+    try {
+      const res = await API.get(
+        `/permissions/${user}/${team}`
+      );
+
+      setPermissions(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -38,8 +51,11 @@ function Resolver() {
       <div className="card">
         <h2>Context Selector</h2>
 
-        <select onChange={(e) => setUser(e.target.value)}>
-          <option>Select User</option>
+        <select
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
+        >
+          <option value="">Select User</option>
 
           {users.map((u) => (
             <option key={u._id} value={u._id}>
@@ -48,8 +64,11 @@ function Resolver() {
           ))}
         </select>
 
-        <select onChange={(e) => setTeam(e.target.value)}>
-          <option>Select Team</option>
+        <select
+          value={team}
+          onChange={(e) => setTeam(e.target.value)}
+        >
+          <option value="">Select Team</option>
 
           {teams.map((t) => (
             <option key={t._id} value={t._id}>
@@ -62,8 +81,10 @@ function Resolver() {
       <div className="card">
         <h2>Resolved Permissions</h2>
 
-        {permissions.length === 0 ? (
+        {!selected ? (
           <p>Select user and team.</p>
+        ) : permissions.length === 0 ? (
+          <p>No permissions assigned.</p>
         ) : (
           permissions.map((p, i) => (
             <span className="pill" key={i}>
