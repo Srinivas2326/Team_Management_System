@@ -205,15 +205,28 @@ function Management() {
 
           <button
             className={
-              permissions.includes("VIEW_ONLY")
+              permissions.includes("VIEW_TASK")
                 ? "activeBtn"
                 : ""
             }
             onClick={() =>
-              togglePermission("VIEW_ONLY")
+              togglePermission("VIEW_TASK")
             }
           >
-            VIEW_ONLY
+            VIEW_TASK
+          </button>
+
+          <button
+            className={
+              permissions.includes("MANAGE_USERS")
+                ? "activeBtn"
+                : ""
+            }
+            onClick={() =>
+              togglePermission("MANAGE_USERS")
+            }
+          >
+            MANAGE_USERS
           </button>
 
         </div>
