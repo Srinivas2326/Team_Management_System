@@ -12,6 +12,9 @@ function Tasks() {
 
   const [permissions, setPermissions] = useState([]);
 
+  const [editId, setEditId] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+
   useEffect(() => {
     loadInitialData();
     loadTasks();
@@ -32,6 +35,7 @@ function Tasks() {
 
       setUsers(usersRes.data);
       setTeams(teamsRes.data);
+
     } catch (error) {
       console.log(error);
     }
@@ -41,6 +45,7 @@ function Tasks() {
     try {
       const res = await API.get("/tasks");
       setTasks(res.data);
+
     } catch (error) {
       console.log(error);
     }
@@ -53,6 +58,7 @@ function Tasks() {
       );
 
       setPermissions(res.data);
+
     } catch (error) {
       console.log(error);
       setPermissions([]);
@@ -73,6 +79,7 @@ function Tasks() {
 
       setTitle("");
       loadTasks();
+
     } catch (error) {
       console.log(error);
     }
@@ -82,25 +89,56 @@ function Tasks() {
     try {
       await API.delete(`/tasks/${id}`);
       loadTasks();
+
     } catch (error) {
       console.log(error);
     }
   };
 
+  const startEdit = (task) => {
+    setEditId(task._id);
+    setEditTitle(task.title);
+  };
+
+  const updateTask = async () => {
+    if (!editTitle.trim()) {
+      alert("Enter title");
+      return;
+    }
+
+    try {
+      await API.put(`/tasks/${editId}`, {
+        title: editTitle
+      });
+
+      setEditId("");
+      setEditTitle("");
+      loadTasks();
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // PERMISSIONS
   const canCreate =
     permissions.includes("CREATE_TASK");
+
+  const canEdit =
+    permissions.includes("EDIT_TASK");
 
   const canDelete =
     permissions.includes("DELETE_TASK");
 
   const canView =
     permissions.includes("VIEW_ONLY") ||
-    permissions.includes("CREATE_TASK") ||
-    permissions.includes("EDIT_TASK") ||
-    permissions.includes("DELETE_TASK");
+    canCreate ||
+    canEdit ||
+    canDelete;
 
   return (
     <div className="grid">
+
       {/* LEFT SIDE */}
       <div className="card">
         <h2>Task Access</h2>
@@ -145,6 +183,7 @@ function Tasks() {
           ))}
         </select>
 
+        {/* Permissions */}
         {selectedUser &&
           selectedTeam &&
           permissions.length > 0 && (
@@ -169,6 +208,7 @@ function Tasks() {
             </div>
           )}
 
+        {/* Create Task */}
         {canCreate && (
           <>
             <h2
@@ -202,41 +242,82 @@ function Tasks() {
 
         {!selectedUser ||
         !selectedTeam ? (
-          <p>
-            Select user and team.
-          </p>
+          <p>Select user and team.</p>
+
         ) : !canView ? (
           <p>
-            No permission to view
-            tasks.
+            No permission to view tasks.
           </p>
+
         ) : tasks.length === 0 ? (
           <p>No tasks found.</p>
+
         ) : (
           tasks.map((task) => (
             <div
               key={task._id}
               style={{
-                marginBottom: "18px"
+                marginBottom: "20px"
               }}
             >
-              <p>{task.title}</p>
+              {/* EDIT MODE */}
+              {editId === task._id ? (
+                <>
+                  <input
+                    value={editTitle}
+                    onChange={(e) =>
+                      setEditTitle(
+                        e.target.value
+                      )
+                    }
+                  />
 
-              {canDelete && (
-                <button
-                  onClick={() =>
-                    deleteTask(
-                      task._id
-                    )
-                  }
-                >
-                  Delete
-                </button>
+                  <button
+                    onClick={updateTask}
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setEditId("")
+                    }
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{task.title}</p>
+
+                  {canEdit && (
+                    <button
+                      onClick={() =>
+                        startEdit(task)
+                      }
+                    >
+                      Edit
+                    </button>
+                  )}
+
+                  {canDelete && (
+                    <button
+                      onClick={() =>
+                        deleteTask(
+                          task._id
+                        )
+                      }
+                    >
+                      Delete
+                    </button>
+                  )}
+                </>
               )}
             </div>
           ))
         )}
       </div>
+
     </div>
   );
 }
