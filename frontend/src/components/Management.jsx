@@ -9,6 +9,7 @@ function Management() {
   const [roleName, setRoleName] = useState("");
   const [permissions, setPermissions] = useState([]);
 
+  // Toggle Permissions
   const togglePermission = (value) => {
     if (permissions.includes(value)) {
       setPermissions(
@@ -19,29 +20,85 @@ function Management() {
     }
   };
 
+  // Create User
   const createUser = async () => {
-    await API.post("/users", { name, email });
-    alert("User Created");
-    setName("");
-    setEmail("");
+    try {
+      if (!name.trim() || !email.trim()) {
+        alert("Please enter name and email");
+        return;
+      }
+
+      await API.post("/users", {
+        name: name.trim(),
+        email: email.trim()
+      });
+
+      alert("User Created Successfully");
+
+      setName("");
+      setEmail("");
+
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+        "Failed to create user"
+      );
+    }
   };
 
+  // Create Team
   const createTeam = async () => {
-    await API.post("/teams", { name: team });
-    alert("Team Created");
-    setTeam("");
+    try {
+      if (!team.trim()) {
+        alert("Please enter team name");
+        return;
+      }
+
+      await API.post("/teams", {
+        name: team.trim()
+      });
+
+      alert("Team Created Successfully");
+
+      setTeam("");
+
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+        "Failed to create team"
+      );
+    }
   };
 
+  // Create Role
   const createRole = async () => {
-    await API.post("/roles", {
-      name: roleName,
-      permissions
-    });
+    try {
+      if (!roleName.trim()) {
+        alert("Please enter role name");
+        return;
+      }
 
-    alert("Role Created");
+      if (permissions.length === 0) {
+        alert("Select at least one permission");
+        return;
+      }
 
-    setRoleName("");
-    setPermissions([]);
+      await API.post("/roles", {
+        name: roleName.trim(),
+        permissions
+      });
+
+      alert("Role Created Successfully");
+
+      setRoleName("");
+      setPermissions([]);
+
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+        "Failed to create role"
+      );
+    }
   };
 
   return (
@@ -52,6 +109,7 @@ function Management() {
         <h2>Create User</h2>
 
         <input
+          type="text"
           placeholder="Full Name"
           value={name}
           onChange={(e) =>
@@ -60,6 +118,7 @@ function Management() {
         />
 
         <input
+          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) =>
@@ -77,6 +136,7 @@ function Management() {
         <h2>Create Team</h2>
 
         <input
+          type="text"
           placeholder="Team Name"
           value={team}
           onChange={(e) =>
@@ -94,6 +154,7 @@ function Management() {
         <h2>Create Role</h2>
 
         <input
+          type="text"
           placeholder="Role Name"
           value={roleName}
           onChange={(e) =>
@@ -102,7 +163,13 @@ function Management() {
         />
 
         <div className="roleButtons">
+
           <button
+            className={
+              permissions.includes("CREATE_TASK")
+                ? "activeBtn"
+                : ""
+            }
             onClick={() =>
               togglePermission("CREATE_TASK")
             }
@@ -111,6 +178,11 @@ function Management() {
           </button>
 
           <button
+            className={
+              permissions.includes("EDIT_TASK")
+                ? "activeBtn"
+                : ""
+            }
             onClick={() =>
               togglePermission("EDIT_TASK")
             }
@@ -119,6 +191,11 @@ function Management() {
           </button>
 
           <button
+            className={
+              permissions.includes("DELETE_TASK")
+                ? "activeBtn"
+                : ""
+            }
             onClick={() =>
               togglePermission("DELETE_TASK")
             }
@@ -127,12 +204,18 @@ function Management() {
           </button>
 
           <button
+            className={
+              permissions.includes("VIEW_ONLY")
+                ? "activeBtn"
+                : ""
+            }
             onClick={() =>
               togglePermission("VIEW_ONLY")
             }
           >
             VIEW_ONLY
           </button>
+
         </div>
 
         <button onClick={createRole}>
