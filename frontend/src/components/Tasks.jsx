@@ -52,7 +52,7 @@ function Tasks() {
     }
   };
 
-  // Load Role from Membership
+  // Load User Role from Membership
   const loadUserRole = async () => {
     try {
       const res = await API.get("/membership");
@@ -64,11 +64,14 @@ function Tasks() {
       );
 
       if (found) {
-        setRole(found.role);
+        setRole(
+          found.role?.name ||
+          found.role ||
+          ""
+        );
       } else {
         setRole("");
       }
-
     } catch (error) {
       console.log(error);
       setRole("");
@@ -93,7 +96,9 @@ function Tasks() {
     isAdmin;
 
   const canView =
-    isAdmin || isManager || isViewer;
+    isAdmin ||
+    isManager ||
+    isViewer;
 
   // Create Task
   const createTask = async () => {
@@ -110,7 +115,6 @@ function Tasks() {
 
       setTitle("");
       loadTasks();
-
     } catch (error) {
       console.log(error);
     }
@@ -135,20 +139,18 @@ function Tasks() {
   // Update Task
   const updateTask = async () => {
     if (!editTitle.trim()) {
-      alert("Enter title");
+      alert("Enter task title");
       return;
     }
 
     try {
       await API.put(`/tasks/${editId}`, {
-        title: editTitle
+        title: editTitle.trim()
       });
 
       setEditId("");
       setEditTitle("");
-
       loadTasks();
-
     } catch (error) {
       console.log(error);
     }
@@ -157,14 +159,17 @@ function Tasks() {
   return (
     <div className="dashboardPage">
 
-      {/* Left Card */}
+      {/* Left Side */}
       <div className="contextCard">
         <h2>Task Access</h2>
 
+        {/* Users */}
         <select
           value={selectedUser}
           onChange={(e) =>
-            setSelectedUser(e.target.value)
+            setSelectedUser(
+              e.target.value
+            )
           }
         >
           <option value="">
@@ -181,10 +186,13 @@ function Tasks() {
           ))}
         </select>
 
+        {/* Teams */}
         <select
           value={selectedTeam}
           onChange={(e) =>
-            setSelectedTeam(e.target.value)
+            setSelectedTeam(
+              e.target.value
+            )
           }
         >
           <option value="">
@@ -219,6 +227,19 @@ function Tasks() {
           </>
         )}
 
+        {/* Admin Message */}
+        {canManageUsers && (
+          <p
+            style={{
+              marginTop: "15px",
+              color: "green",
+              fontWeight: "600"
+            }}
+          >
+            Admin can manage users
+          </p>
+        )}
+
         {/* Create Task */}
         {canCreate && (
           <>
@@ -234,7 +255,9 @@ function Tasks() {
               placeholder="Task Title"
               value={title}
               onChange={(e) =>
-                setTitle(e.target.value)
+                setTitle(
+                  e.target.value
+                )
               }
             />
 
@@ -245,26 +268,26 @@ function Tasks() {
             </button>
           </>
         )}
-
-        
       </div>
 
-      {/* Right Card */}
+      {/* Right Side */}
       <div className="permissionCard">
         <h2>All Tasks</h2>
 
         {!selectedUser ||
         !selectedTeam ? (
-          <p>Select user and team.</p>
-
+          <p>
+            Select user and team.
+          </p>
         ) : !canView ? (
           <p>
-            No permission to view tasks.
+            No permission to view
+            tasks.
           </p>
-
         ) : tasks.length === 0 ? (
-          <p>No tasks available.</p>
-
+          <p>
+            No tasks available.
+          </p>
         ) : (
           tasks.map((task) => (
             <div
@@ -273,26 +296,32 @@ function Tasks() {
                 marginBottom: "20px"
               }}
             >
-              {editId === task._id ? (
+              {editId ===
+              task._id ? (
                 <>
                   <input
                     value={editTitle}
                     onChange={(e) =>
                       setEditTitle(
-                        e.target.value
+                        e.target
+                          .value
                       )
                     }
                   />
 
                   <button
-                    onClick={updateTask}
+                    onClick={
+                      updateTask
+                    }
                   >
                     Save
                   </button>
 
                   <button
                     onClick={() =>
-                      setEditId("")
+                      setEditId(
+                        ""
+                      )
                     }
                   >
                     Cancel
@@ -300,12 +329,16 @@ function Tasks() {
                 </>
               ) : (
                 <>
-                  <p>{task.title}</p>
+                  <p>
+                    {task.title}
+                  </p>
 
                   {canEdit && (
                     <button
                       onClick={() =>
-                        startEdit(task)
+                        startEdit(
+                          task
+                        )
                       }
                     >
                       Edit
@@ -329,7 +362,6 @@ function Tasks() {
           ))
         )}
       </div>
-
     </div>
   );
 }
