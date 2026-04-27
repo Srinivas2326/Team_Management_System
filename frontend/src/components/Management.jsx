@@ -104,7 +104,6 @@ function Management() {
         </button>
       </div>
 
-      {/* Fixed Roles Info */}
       <div className="card">
         <h2>Available Roles</h2>
 

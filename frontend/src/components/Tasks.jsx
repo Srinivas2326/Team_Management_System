@@ -157,7 +157,6 @@ function Tasks() {
   return (
     <div className="dashboardPage">
 
-      {/* Left Card */}
       <div className="contextCard">
         <h2>Task Access</h2>
 
@@ -249,7 +248,6 @@ function Tasks() {
         
       </div>
 
-      {/* Right Card */}
       <div className="permissionCard">
         <h2>All Tasks</h2>
 

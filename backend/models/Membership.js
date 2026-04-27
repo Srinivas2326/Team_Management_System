@@ -1,4 +1,3 @@
-// models/Membership.js
 
 const mongoose = require("mongoose");
 
