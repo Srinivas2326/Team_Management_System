@@ -1,15 +1,22 @@
-const Membership = require("../models/Membership");
+
+const Membership =
+require("../models/Membership");
 
 exports.createMembership = async (req, res) => {
   try {
     const { user, team, role } = req.body;
 
-    let data = await Membership.findOne({ user, team });
+    let data =
+    await Membership.findOne({ user, team });
 
     if (data) {
       data.role = role;
       await data.save();
-      return res.json(data);
+
+      return res.json({
+        message: "Role Updated Successfully",
+        data
+      });
     }
 
     data = await Membership.create({
@@ -18,7 +25,10 @@ exports.createMembership = async (req, res) => {
       role
     });
 
-    res.status(201).json(data);
+    res.status(201).json({
+      message: "Membership Created Successfully",
+      data
+    });
 
   } catch (error) {
     res.status(500).json({
@@ -26,6 +36,7 @@ exports.createMembership = async (req, res) => {
     });
   }
 };
+
 
 exports.getMemberships = async (req, res) => {
   try {
@@ -42,15 +53,20 @@ exports.getMemberships = async (req, res) => {
   }
 };
 
+
 exports.updateMembership = async (req, res) => {
   try {
-    const data = await Membership.findByIdAndUpdate(
+    const data =
+    await Membership.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
 
-    res.json(data);
+    res.json({
+      message: "Updated Successfully",
+      data
+    });
 
   } catch (error) {
     res.status(500).json({
@@ -59,9 +75,12 @@ exports.updateMembership = async (req, res) => {
   }
 };
 
+
 exports.deleteMembership = async (req, res) => {
   try {
-    await Membership.findByIdAndDelete(req.params.id);
+    await Membership.findByIdAndDelete(
+      req.params.id
+    );
 
     res.json({
       message: "Removed Successfully"

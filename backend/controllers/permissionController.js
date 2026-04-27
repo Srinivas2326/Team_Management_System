@@ -1,11 +1,16 @@
-const Membership = require("../models/Membership");
-const Role = require("../models/Role");
+
+const Membership =
+require("../models/Membership");
+
+const Role =
+require("../models/Role");
 
 exports.getPermissions = async (req, res) => {
   try {
     const { userId, teamId } = req.params;
 
-    const membership = await Membership.findOne({
+    const membership =
+    await Membership.findOne({
       user: userId,
       team: teamId
     });
@@ -14,7 +19,8 @@ exports.getPermissions = async (req, res) => {
       return res.json([]);
     }
 
-    const role = await Role.findOne({
+    const role =
+    await Role.findOne({
       name: membership.role
     });
 

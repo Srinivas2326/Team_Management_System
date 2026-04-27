@@ -1,3 +1,5 @@
+// models/Membership.js
+
 const mongoose = require("mongoose");
 
 const membershipSchema = new mongoose.Schema(
@@ -14,12 +16,14 @@ const membershipSchema = new mongoose.Schema(
     required: true
   },
 
-  roles: [{
+  role: {
     type: String,
-    enum: ["Admin", "Manager", "Viewer"]
-  }]
+    enum: ["Admin", "Manager", "Viewer"],
+    required: true
+  }
 },
 { timestamps: true }
 );
 
-module.exports = mongoose.model("Membership", membershipSchema);
+module.exports =
+mongoose.model("Membership", membershipSchema);
