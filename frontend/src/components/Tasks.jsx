@@ -6,11 +6,11 @@ function Tasks() {
   const [users, setUsers] = useState([]);
   const [teams, setTeams] = useState([]);
 
+  const [title, setTitle] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
 
-  const [role, setRole] = useState("");
-  const [title, setTitle] = useState("");
+  const [permissions, setPermissions] = useState([]);
 
   const [editId, setEditId] = useState("");
   const [editTitle, setEditTitle] = useState("");
@@ -22,13 +22,12 @@ function Tasks() {
 
   useEffect(() => {
     if (selectedUser && selectedTeam) {
-      loadUserRole();
+      loadPermissions();
     } else {
-      setRole("");
+      setPermissions([]);
     }
   }, [selectedUser, selectedTeam]);
 
-  // Load Users + Teams
   const loadInitialData = async () => {
     try {
       const usersRes = await API.get("/users");
@@ -41,7 +40,6 @@ function Tasks() {
     }
   };
 
-  // Load Tasks
   const loadTasks = async () => {
     try {
       const res = await API.get("/tasks");
@@ -51,39 +49,19 @@ function Tasks() {
     }
   };
 
-  // Load Role
-  const loadUserRole = async () => {
+  const loadPermissions = async () => {
     try {
-      const res = await API.get("/membership");
-
-      const found = res.data.find(
-        (item) =>
-          item.user?._id === selectedUser &&
-          item.team?._id === selectedTeam
+      const res = await API.get(
+        `/permissions/${selectedUser}/${selectedTeam}`
       );
 
-      if (found) {
-        setRole(found.role?.name || found.role || "");
-      } else {
-        setRole("");
-      }
+      setPermissions(res.data);
     } catch (error) {
       console.log(error);
-      setRole("");
+      setPermissions([]);
     }
   };
 
-  // Roles
-  const isAdmin = role === "Admin";
-  const isManager = role === "Manager";
-  const isViewer = role === "Viewer";
-
-  const canCreate = isAdmin || isManager;
-  const canEdit = isAdmin || isManager;
-  const canDelete = isAdmin || isManager;
-  const canView = isAdmin || isManager || isViewer;
-
-  // Create Task
   const createTask = async () => {
     if (!title.trim()) {
       alert("Enter task title");
@@ -103,7 +81,6 @@ function Tasks() {
     }
   };
 
-  // Delete Task
   const deleteTask = async (id) => {
     try {
       await API.delete(`/tasks/${id}`);
@@ -113,13 +90,11 @@ function Tasks() {
     }
   };
 
-  // Start Edit
   const startEdit = (task) => {
     setEditId(task._id);
     setEditTitle(task.title);
   };
 
-  // Update Task
   const updateTask = async () => {
     if (!editTitle.trim()) {
       alert("Enter task title");
@@ -139,18 +114,40 @@ function Tasks() {
     }
   };
 
-  return (
-    <div className="dashboardPage">
+  const cancelEdit = () => {
+    setEditId("");
+    setEditTitle("");
+  };
 
-      {/* Left Side */}
-      <div className="contextCard">
+  const canCreate =
+    permissions.includes("CREATE_TASK");
+
+  const canEdit =
+    permissions.includes("EDIT_TASK");
+
+  const canDelete =
+    permissions.includes("DELETE_TASK");
+
+  const canView =
+    permissions.includes("VIEW_TASK") ||
+    permissions.includes("VIEW_ONLY") ||
+    canCreate ||
+    canEdit ||
+    canDelete;
+
+  return (
+    <div className="grid">
+
+      {/* LEFT SIDE */}
+      <div className="card">
         <h2>Task Access</h2>
 
-        {/* Select User */}
         <select
           value={selectedUser}
           onChange={(e) =>
-            setSelectedUser(e.target.value)
+            setSelectedUser(
+              e.target.value
+            )
           }
         >
           <option value="">
@@ -167,11 +164,12 @@ function Tasks() {
           ))}
         </select>
 
-        {/* Select Team */}
         <select
           value={selectedTeam}
           onChange={(e) =>
-            setSelectedTeam(e.target.value)
+            setSelectedTeam(
+              e.target.value
+            )
           }
         >
           <option value="">
@@ -188,30 +186,35 @@ function Tasks() {
           ))}
         </select>
 
-        {/* Show Role */}
-        {role && (
-          <>
-            <p
-              style={{
-                marginTop: "18px",
-                fontWeight: "600"
-              }}
-            >
-              Assigned Role
-            </p>
+        {selectedUser &&
+          selectedTeam &&
+          permissions.length > 0 && (
+            <div>
+              <p
+                style={{
+                  marginTop: "15px",
+                  fontWeight: "600"
+                }}
+              >
+                Permissions
+              </p>
 
-            <span className="pill">
-              {role}
-            </span>
-          </>
-        )}
+              {permissions.map((item, i) => (
+                <span
+                  key={i}
+                  className="pill"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
 
-        {/* Create Task */}
         {canCreate && (
           <>
             <h2
               style={{
-                marginTop: "25px"
+                marginTop: "20px"
               }}
             >
               Create Task
@@ -221,33 +224,42 @@ function Tasks() {
               placeholder="Task Title"
               value={title}
               onChange={(e) =>
-                setTitle(e.target.value)
+                setTitle(
+                  e.target.value
+                )
               }
             />
 
-            <button onClick={createTask}>
+            <button
+              onClick={createTask}
+            >
               Create Task
             </button>
           </>
         )}
       </div>
 
-      {/* Right Side */}
-      <div className="permissionCard">
+      {/* RIGHT SIDE */}
+      <div className="card">
         <h2>All Tasks</h2>
 
-        {!selectedUser || !selectedTeam ? (
-          <p>Select user and team.</p>
+        {!selectedUser ||
+        !selectedTeam ? (
+          <p>
+            Select user and team.
+          </p>
         ) : !canView ? (
-          <p>No permission to view tasks.</p>
+          <p>
+            No permission to view tasks.
+          </p>
         ) : tasks.length === 0 ? (
-          <p>No tasks available.</p>
+          <p>No tasks found.</p>
         ) : (
           tasks.map((task) => (
             <div
               key={task._id}
               style={{
-                marginBottom: "20px"
+                marginBottom: "18px"
               }}
             >
               {editId === task._id ? (
@@ -261,14 +273,14 @@ function Tasks() {
                     }
                   />
 
-                  <button onClick={updateTask}>
+                  <button
+                    onClick={updateTask}
+                  >
                     Save
                   </button>
 
                   <button
-                    onClick={() =>
-                      setEditId("")
-                    }
+                    onClick={cancelEdit}
                   >
                     Cancel
                   </button>
@@ -280,7 +292,9 @@ function Tasks() {
                   {canEdit && (
                     <button
                       onClick={() =>
-                        startEdit(task)
+                        startEdit(
+                          task
+                        )
                       }
                     >
                       Edit
@@ -290,7 +304,9 @@ function Tasks() {
                   {canDelete && (
                     <button
                       onClick={() =>
-                        deleteTask(task._id)
+                        deleteTask(
+                          task._id
+                        )
                       }
                     >
                       Delete
