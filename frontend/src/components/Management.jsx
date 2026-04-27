@@ -6,25 +6,11 @@ function Management() {
   const [email, setEmail] = useState("");
   const [team, setTeam] = useState("");
 
-  const [roleName, setRoleName] = useState("");
-  const [permissions, setPermissions] = useState([]);
-
-  // Toggle Permissions
-  const togglePermission = (value) => {
-    if (permissions.includes(value)) {
-      setPermissions(
-        permissions.filter((p) => p !== value)
-      );
-    } else {
-      setPermissions([...permissions, value]);
-    }
-  };
-
   // Create User
   const createUser = async () => {
     try {
       if (!name.trim() || !email.trim()) {
-        alert("Please enter name and email");
+        alert("Please enter full name and email");
         return;
       }
 
@@ -66,37 +52,6 @@ function Management() {
       alert(
         error.response?.data?.message ||
         "Failed to create team"
-      );
-    }
-  };
-
-  // Create Role
-  const createRole = async () => {
-    try {
-      if (!roleName.trim()) {
-        alert("Please enter role name");
-        return;
-      }
-
-      if (permissions.length === 0) {
-        alert("Select at least one permission");
-        return;
-      }
-
-      await API.post("/roles", {
-        name: roleName.trim(),
-        permissions
-      });
-
-      alert("Role Created Successfully");
-
-      setRoleName("");
-      setPermissions([]);
-
-    } catch (error) {
-      alert(
-        error.response?.data?.message ||
-        "Failed to create role"
       );
     }
   };
@@ -149,91 +104,19 @@ function Management() {
         </button>
       </div>
 
-      {/* Create Role */}
+      {/* Fixed Roles Info */}
       <div className="card">
-        <h2>Create Role</h2>
+        <h2>Available Roles</h2>
 
-        <input
-          type="text"
-          placeholder="Role Name"
-          value={roleName}
-          onChange={(e) =>
-            setRoleName(e.target.value)
-          }
-        />
+        <p><strong>Admin</strong> → Create, Edit, Delete Tasks + Manage Users</p>
 
-        <div className="roleButtons">
+        <p><strong>Manager</strong> → Create, Edit, Delete Tasks</p>
 
-          <button
-            className={
-              permissions.includes("CREATE_TASK")
-                ? "activeBtn"
-                : ""
-            }
-            onClick={() =>
-              togglePermission("CREATE_TASK")
-            }
-          >
-            CREATE_TASK
-          </button>
+        <p><strong>Viewer</strong> → View Tasks Only</p>
 
-          <button
-            className={
-              permissions.includes("EDIT_TASK")
-                ? "activeBtn"
-                : ""
-            }
-            onClick={() =>
-              togglePermission("EDIT_TASK")
-            }
-          >
-            EDIT_TASK
-          </button>
-
-          <button
-            className={
-              permissions.includes("DELETE_TASK")
-                ? "activeBtn"
-                : ""
-            }
-            onClick={() =>
-              togglePermission("DELETE_TASK")
-            }
-          >
-            DELETE_TASK
-          </button>
-
-          <button
-            className={
-              permissions.includes("VIEW_TASK")
-                ? "activeBtn"
-                : ""
-            }
-            onClick={() =>
-              togglePermission("VIEW_TASK")
-            }
-          >
-            VIEW_TASK
-          </button>
-
-          <button
-            className={
-              permissions.includes("MANAGE_USERS")
-                ? "activeBtn"
-                : ""
-            }
-            onClick={() =>
-              togglePermission("MANAGE_USERS")
-            }
-          >
-            MANAGE_USERS
-          </button>
-
-        </div>
-
-        <button onClick={createRole}>
-          Create Role
-        </button>
+        <p style={{ marginTop: "15px", color: "#666" }}>
+          Assign roles in Team Members page.
+        </p>
       </div>
 
     </div>

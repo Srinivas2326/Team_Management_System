@@ -6,11 +6,12 @@ function Tasks() {
   const [users, setUsers] = useState([]);
   const [teams, setTeams] = useState([]);
 
-  const [title, setTitle] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
 
-  const [permissions, setPermissions] = useState([]);
+  const [role, setRole] = useState("");
+
+  const [title, setTitle] = useState("");
 
   const [editId, setEditId] = useState("");
   const [editTitle, setEditTitle] = useState("");
@@ -22,12 +23,13 @@ function Tasks() {
 
   useEffect(() => {
     if (selectedUser && selectedTeam) {
-      loadPermissions();
+      loadUserRole();
     } else {
-      setPermissions([]);
+      setRole("");
     }
   }, [selectedUser, selectedTeam]);
 
+  // Load Users + Teams
   const loadInitialData = async () => {
     try {
       const usersRes = await API.get("/users");
@@ -35,36 +37,65 @@ function Tasks() {
 
       setUsers(usersRes.data);
       setTeams(teamsRes.data);
-
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Load Tasks
   const loadTasks = async () => {
     try {
       const res = await API.get("/tasks");
       setTasks(res.data);
-
     } catch (error) {
       console.log(error);
     }
   };
 
-  const loadPermissions = async () => {
+  // Load Role from Membership
+  const loadUserRole = async () => {
     try {
-      const res = await API.get(
-        `/permissions/${selectedUser}/${selectedTeam}`
+      const res = await API.get("/membership");
+
+      const found = res.data.find(
+        (item) =>
+          item.user?._id === selectedUser &&
+          item.team?._id === selectedTeam
       );
 
-      setPermissions(res.data);
+      if (found) {
+        setRole(found.role);
+      } else {
+        setRole("");
+      }
 
     } catch (error) {
       console.log(error);
-      setPermissions([]);
+      setRole("");
     }
   };
 
+  // Role Permissions
+  const isAdmin = role === "Admin";
+  const isManager = role === "Manager";
+  const isViewer = role === "Viewer";
+
+  const canCreate =
+    isAdmin || isManager;
+
+  const canEdit =
+    isAdmin || isManager;
+
+  const canDelete =
+    isAdmin || isManager;
+
+  const canManageUsers =
+    isAdmin;
+
+  const canView =
+    isAdmin || isManager || isViewer;
+
+  // Create Task
   const createTask = async () => {
     if (!title.trim()) {
       alert("Enter task title");
@@ -73,7 +104,7 @@ function Tasks() {
 
     try {
       await API.post("/tasks", {
-        title,
+        title: title.trim(),
         description: "New Task"
       });
 
@@ -85,21 +116,23 @@ function Tasks() {
     }
   };
 
+  // Delete Task
   const deleteTask = async (id) => {
     try {
       await API.delete(`/tasks/${id}`);
       loadTasks();
-
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Start Edit
   const startEdit = (task) => {
     setEditId(task._id);
     setEditTitle(task.title);
   };
 
+  // Update Task
   const updateTask = async () => {
     if (!editTitle.trim()) {
       alert("Enter title");
@@ -113,6 +146,7 @@ function Tasks() {
 
       setEditId("");
       setEditTitle("");
+
       loadTasks();
 
     } catch (error) {
@@ -120,27 +154,11 @@ function Tasks() {
     }
   };
 
-  // PERMISSIONS
-  const canCreate =
-    permissions.includes("CREATE_TASK");
-
-  const canEdit =
-    permissions.includes("EDIT_TASK");
-
-  const canDelete =
-    permissions.includes("DELETE_TASK");
-
-  const canView =
-    permissions.includes("VIEW_ONLY") ||
-    canCreate ||
-    canEdit ||
-    canDelete;
-
   return (
-    <div className="grid">
+    <div className="dashboardPage">
 
-      {/* LEFT SIDE */}
-      <div className="card">
+      {/* Left Card */}
+      <div className="contextCard">
         <h2>Task Access</h2>
 
         <select
@@ -183,37 +201,30 @@ function Tasks() {
           ))}
         </select>
 
-        {/* Permissions */}
-        {selectedUser &&
-          selectedTeam &&
-          permissions.length > 0 && (
-            <div>
-              <p
-                style={{
-                  marginTop: "15px",
-                  fontWeight: "600"
-                }}
-              >
-                Permissions
-              </p>
+        {/* Show Role */}
+        {role && (
+          <>
+            <p
+              style={{
+                marginTop: "18px",
+                fontWeight: "600"
+              }}
+            >
+              Assigned Role
+            </p>
 
-              {permissions.map((item, i) => (
-                <span
-                  className="pill"
-                  key={i}
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          )}
+            <span className="pill">
+              {role}
+            </span>
+          </>
+        )}
 
         {/* Create Task */}
         {canCreate && (
           <>
             <h2
               style={{
-                marginTop: "20px"
+                marginTop: "25px"
               }}
             >
               Create Task
@@ -234,10 +245,23 @@ function Tasks() {
             </button>
           </>
         )}
+
+        {/* Admin Only */}
+        {canManageUsers && (
+          <p
+            style={{
+              marginTop: "15px",
+              color: "green",
+              fontWeight: "600"
+            }}
+          >
+            Admin can manage users.
+          </p>
+        )}
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="card">
+      {/* Right Card */}
+      <div className="permissionCard">
         <h2>All Tasks</h2>
 
         {!selectedUser ||
@@ -250,7 +274,7 @@ function Tasks() {
           </p>
 
         ) : tasks.length === 0 ? (
-          <p>No tasks found.</p>
+          <p>No tasks available.</p>
 
         ) : (
           tasks.map((task) => (
@@ -260,7 +284,6 @@ function Tasks() {
                 marginBottom: "20px"
               }}
             >
-              {/* EDIT MODE */}
               {editId === task._id ? (
                 <>
                   <input

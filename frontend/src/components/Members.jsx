@@ -16,18 +16,19 @@ function Members() {
   const [editId, setEditId] = useState("");
 
   useEffect(() => {
-    fetchInitialData();
+    loadInitialData();
   }, []);
 
   useEffect(() => {
     if (selectedTeam) {
-      fetchMembers(selectedTeam);
+      loadMembers(selectedTeam);
     } else {
       setMembers([]);
     }
   }, [selectedTeam]);
 
-  const fetchInitialData = async () => {
+  // Load Users + Teams
+  const loadInitialData = async () => {
     try {
       const teamRes = await API.get("/teams");
       const userRes = await API.get("/users");
@@ -39,15 +40,15 @@ function Members() {
     }
   };
 
-  const fetchMembers = async (teamId) => {
+  // Load Team Members
+  const loadMembers = async (teamId) => {
     try {
       const res = await API.get("/membership");
 
       const filtered = res.data.filter(
         (item) =>
           item.team &&
-          item.team._id &&
-          item.team._id.toString() === teamId.toString()
+          item.team._id === teamId
       );
 
       setMembers(filtered);
@@ -56,7 +57,8 @@ function Members() {
     }
   };
 
-  const assignRole = async () => {
+  // Assign / Update Role
+  const assignMember = async () => {
     if (!selectedTeam || !selectedUser || !selectedRole) {
       alert("Please select team, user and role");
       return;
@@ -81,9 +83,8 @@ function Members() {
         alert("Assigned Successfully");
       }
 
-      fetchMembers(selectedTeam);
-
       resetForm();
+      loadMembers(selectedTeam);
 
     } catch (error) {
       console.log(error);
@@ -91,6 +92,7 @@ function Members() {
     }
   };
 
+  // Edit Member
   const editMember = (member) => {
     setSelectedUser(member.user._id);
     setSelectedRole(member.role);
@@ -98,11 +100,12 @@ function Members() {
     setEditMode(true);
   };
 
+  // Remove Member
   const removeMember = async (id) => {
     try {
       await API.delete(`/membership/${id}`);
 
-      fetchMembers(selectedTeam);
+      loadMembers(selectedTeam);
 
       if (editId === id) {
         resetForm();
@@ -116,6 +119,7 @@ function Members() {
     }
   };
 
+  // Reset
   const resetForm = () => {
     setSelectedUser("");
     setSelectedRole("");
@@ -124,29 +128,36 @@ function Members() {
   };
 
   const teamName =
-    teams.find((t) => t._id === selectedTeam)?.name || "";
+    teams.find((team) => team._id === selectedTeam)?.name || "";
 
   return (
     <div className="dashboardPage">
+
+      {/* Left Card */}
       <div className="contextCard">
         <h2>
           {editMode ? "Edit Member Role" : "Add to Team"}
         </h2>
 
         <p>
-          Assign users to teams with specific roles.
+          Assign Admin, Manager or Viewer role.
         </p>
 
         <label>Select Team</label>
 
         <select
           value={selectedTeam}
-          onChange={(e) => setSelectedTeam(e.target.value)}
+          onChange={(e) =>
+            setSelectedTeam(e.target.value)
+          }
         >
           <option value="">Select Team...</option>
 
           {teams.map((team) => (
-            <option key={team._id} value={team._id}>
+            <option
+              key={team._id}
+              value={team._id}
+            >
               {team.name}
             </option>
           ))}
@@ -156,12 +167,17 @@ function Members() {
 
         <select
           value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
+          onChange={(e) =>
+            setSelectedUser(e.target.value)
+          }
         >
           <option value="">Select User...</option>
 
           {users.map((user) => (
-            <option key={user._id} value={user._id}>
+            <option
+              key={user._id}
+              value={user._id}
+            >
               {user.name}
             </option>
           ))}
@@ -178,14 +194,19 @@ function Members() {
                   ? "roleBtn activeRole"
                   : "roleBtn"
               }
-              onClick={() => setSelectedRole(role)}
+              onClick={() =>
+                setSelectedRole(role)
+              }
             >
               {role}
             </button>
           ))}
         </div>
 
-        <button className="mainBtn" onClick={assignRole}>
+        <button
+          className="mainBtn"
+          onClick={assignMember}
+        >
           {editMode
             ? "Update Assignment"
             : "Assign User"}
@@ -201,27 +222,27 @@ function Members() {
         )}
       </div>
 
+      {/* Right Card */}
       <div className="permissionCard">
         <h2>Team Roster</h2>
 
         {selectedTeam ? (
           <p>Current members of {teamName}</p>
         ) : (
-          <p>Select a team to view members.</p>
+          <p>Select team to view roster.</p>
         )}
 
         {!selectedTeam ? (
           <div className="emptyBox">
             <h3>Select Team</h3>
-            <p>Select team to view roster.</p>
           </div>
         ) : members.length === 0 ? (
           <div className="emptyBox">
             <h3>No Members</h3>
-            <p>No users assigned yet.</p>
           </div>
         ) : (
           <div className="tableWrap">
+
             <div className="tableHead">
               <span>MEMBER</span>
               <span>ROLE</span>
@@ -230,10 +251,11 @@ function Members() {
 
             {members.map((member) => (
               <div
-                className="tableRow"
                 key={member._id}
+                className="tableRow"
               >
                 <div className="memberBox">
+
                   <div className="avatar">
                     {member.user?.name
                       ?.charAt(0)
@@ -244,6 +266,7 @@ function Members() {
                     <h4>{member.user?.name}</h4>
                     <p>{member.user?.email}</p>
                   </div>
+
                 </div>
 
                 <span className="roleTag">
@@ -251,6 +274,7 @@ function Members() {
                 </span>
 
                 <div className="actionBtns">
+
                   <button
                     className="editBtn"
                     onClick={() =>
@@ -268,12 +292,16 @@ function Members() {
                   >
                     Remove
                   </button>
+
                 </div>
+
               </div>
             ))}
+
           </div>
         )}
       </div>
+
     </div>
   );
 }
