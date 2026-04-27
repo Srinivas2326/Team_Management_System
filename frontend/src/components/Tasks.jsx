@@ -246,10 +246,7 @@ function Tasks() {
           </>
         )}
 
-        {/* Admin Only */}
-        {canManageUsers && (
-          
-        )}
+        
       </div>
 
       {/* Right Card */}
