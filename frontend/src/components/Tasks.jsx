@@ -248,15 +248,7 @@ function Tasks() {
 
         {/* Admin Only */}
         {canManageUsers && (
-          <p
-            style={{
-              marginTop: "15px",
-              color: "green",
-              fontWeight: "600"
-            }}
-          >
-            Admin can manage users.
-          </p>
+          
         )}
       </div>
 
