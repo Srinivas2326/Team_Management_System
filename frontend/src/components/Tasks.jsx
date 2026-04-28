@@ -68,7 +68,6 @@ function Tasks() {
       } else {
         setRole("");
       }
-
     } catch (error) {
       console.log(error);
       setRole("");
@@ -80,20 +79,10 @@ function Tasks() {
   const isManager = role === "Manager";
   const isViewer = role === "Viewer";
 
-  const canCreate =
-    isAdmin || isManager;
-
-  const canEdit =
-    isAdmin || isManager;
-
-  const canDelete =
-    isAdmin || isManager;
-
-  const canManageUsers =
-    isAdmin;
-
-  const canView =
-    isAdmin || isManager || isViewer;
+  const canCreate = isAdmin || isManager;
+  const canEdit = isAdmin || isManager;
+  const canDelete = isAdmin || isManager;
+  const canView = isAdmin || isManager || isViewer;
 
   // Create Task
   const createTask = async () => {
@@ -105,12 +94,11 @@ function Tasks() {
     try {
       await API.post("/tasks", {
         title: title.trim(),
-        description: "New Task"
+        description: "New Task",
       });
 
       setTitle("");
       loadTasks();
-
     } catch (error) {
       console.log(error);
     }
@@ -141,14 +129,12 @@ function Tasks() {
 
     try {
       await API.put(`/tasks/${editId}`, {
-        title: editTitle
+        title: editTitle,
       });
 
       setEditId("");
       setEditTitle("");
-
       loadTasks();
-
     } catch (error) {
       console.log(error);
     }
@@ -156,7 +142,7 @@ function Tasks() {
 
   return (
     <div className="dashboardPage">
-
+      {/* LEFT PANEL */}
       <div className="contextCard">
         <h2>Task Access</h2>
 
@@ -166,9 +152,7 @@ function Tasks() {
             setSelectedUser(e.target.value)
           }
         >
-          <option value="">
-            Select User
-          </option>
+          <option value="">Select User</option>
 
           {users.map((user) => (
             <option
@@ -186,9 +170,7 @@ function Tasks() {
             setSelectedTeam(e.target.value)
           }
         >
-          <option value="">
-            Select Team
-          </option>
+          <option value="">Select Team</option>
 
           {teams.map((team) => (
             <option
@@ -200,13 +182,13 @@ function Tasks() {
           ))}
         </select>
 
-        {/* Show Role */}
+        {/* ROLE DISPLAY */}
         {role && (
           <>
             <p
               style={{
                 marginTop: "18px",
-                fontWeight: "600"
+                fontWeight: "600",
               }}
             >
               Assigned Role
@@ -218,12 +200,12 @@ function Tasks() {
           </>
         )}
 
-        {/* Create Task */}
+        {/* CREATE TASK */}
         {canCreate && (
           <>
             <h2
               style={{
-                marginTop: "25px"
+                marginTop: "25px",
               }}
             >
               Create Task
@@ -238,96 +220,99 @@ function Tasks() {
             />
 
             <button
+              style={{
+                marginTop: "14px",
+              }}
               onClick={createTask}
             >
               Create Task
             </button>
           </>
         )}
-
-        
       </div>
 
+      {/* RIGHT PANEL */}
       <div className="permissionCard">
         <h2>All Tasks</h2>
 
-        {!selectedUser ||
-        !selectedTeam ? (
+        {!selectedUser || !selectedTeam ? (
           <p>Select user and team.</p>
-
         ) : !canView ? (
-          <p>
-            No permission to view tasks.
-          </p>
-
+          <p>No permission to view tasks.</p>
         ) : tasks.length === 0 ? (
           <p>No tasks available.</p>
-
         ) : (
-          tasks.map((task) => (
-            <div
-              key={task._id}
-              style={{
-                marginBottom: "20px"
-              }}
-            >
-              {editId === task._id ? (
-                <>
-                  <input
-                    value={editTitle}
-                    onChange={(e) =>
-                      setEditTitle(
-                        e.target.value
-                      )
-                    }
-                  />
+          <div className="taskList">
+            {tasks.map((task) => (
+              <div
+                key={task._id}
+                className="taskItem"
+              >
+                {editId === task._id ? (
+                  <>
+                    <div className="taskTitleBox">
+                      <input
+                        value={editTitle}
+                        onChange={(e) =>
+                          setEditTitle(
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
 
-                  <button
-                    onClick={updateTask}
-                  >
-                    Save
-                  </button>
+                    <div className="taskActions">
+                      <button
+                        onClick={updateTask}
+                      >
+                        Save
+                      </button>
 
-                  <button
-                    onClick={() =>
-                      setEditId("")
-                    }
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <>
-                  <p>{task.title}</p>
+                      <button
+                        onClick={() =>
+                          setEditId("")
+                        }
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="taskTitle">
+                      {task.title}
+                    </div>
 
-                  {canEdit && (
-                    <button
-                      onClick={() =>
-                        startEdit(task)
-                      }
-                    >
-                      Edit
-                    </button>
-                  )}
+                    <div className="taskActions">
+                      {canEdit && (
+                        <button
+                          onClick={() =>
+                            startEdit(task)
+                          }
+                        >
+                          Edit
+                        </button>
+                      )}
 
-                  {canDelete && (
-                    <button
-                      onClick={() =>
-                        deleteTask(
-                          task._id
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          ))
+                      {canDelete && (
+                        <button
+                          onClick={() =>
+                            deleteTask(
+                              task._id
+                            )
+                          }
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
         )}
       </div>
-
     </div>
   );
 }

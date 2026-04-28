@@ -437,3 +437,46 @@ margin:15px 0;
 .deleteBtn {
   min-width: 95px;
 }
+
+/* TASKS PAGE FIX */
+
+.taskList {
+  margin-top: 20px;
+}
+
+.taskItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.taskItem:last-child {
+  border-bottom: none;
+}
+
+.taskTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.taskTitleBox {
+  flex: 1;
+}
+
+.taskTitleBox input {
+  width: 100%;
+}
+
+.taskActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.taskActions button {
+  min-width: 95px;
+}
