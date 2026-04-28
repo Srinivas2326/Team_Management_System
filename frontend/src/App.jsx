@@ -44,7 +44,7 @@ function App() {
           }
           onClick={() => setTab("resolver")}
         >
-          Permission Resolver
+          Dashboard
         </button>
 
         <button
