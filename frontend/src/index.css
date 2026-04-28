@@ -189,20 +189,43 @@ button {
   margin-bottom: 22px;        
 }
 
-.roleButtons button,
-.roleGroup button,
-.roleRow button {
-  min-width: 105px;
-  padding: 13px 18px;
+
+.roleGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 18px;
 }
 
-.assignBtn,
-.assignUserBtn,
-.updateBtn,
-.roleButtons + button,
-.roleGroup + button,
-.roleRow + button {
-  margin-top: 18px !important;
+.roleBtn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 13px 22px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.roleBtn:hover {
+  background: #1d4ed8;
+}
+
+.activeRole {
+  background: #1e40af;
+}
+
+
+.mainBtn {
+  margin-top: 26px;
+  display: block;
+}
+
+
+.cancelBtn {
+  margin-top: 14px;
+  margin-left: 12px;
 }
 
 
