@@ -379,3 +379,61 @@ flex-wrap:wrap;
 gap:10px;
 margin:15px 0;
 }
+
+
+.tableWrap {
+  margin-top: 20px;
+}
+
+.tableHead {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.3fr;
+  gap: 24px;
+  align-items: center;
+  font-weight: 700;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.3fr;
+  gap: 24px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.memberBox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.memberBox h4 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.memberBox p {
+  margin: 0;
+  font-size: 15px;
+  color: #64748b;
+}
+
+.roleTag {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.actionBtns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.editBtn,
+.deleteBtn {
+  min-width: 95px;
+}
